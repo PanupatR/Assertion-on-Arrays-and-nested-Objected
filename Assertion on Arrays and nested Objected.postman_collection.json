@@ -1,0 +1,115 @@
+{
+	"info": {
+		"_postman_id": "0881dce2-abc0-4635-b8af-aff313831c91",
+		"name": "Assertion on Arrays and nested Objected",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12446186"
+	},
+	"item": [
+		{
+			"name": "Assertion with nested object and Assertion with nested object with unnumerable properties of an object",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//Assertion nested object\r",
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"let commentsStatus = jsonData.prefs.comments.status;\r",
+							"\r",
+							"console.log(commentsStatus);\r",
+							"\r",
+							"pm.test(\"comment should be disabled\", function () {\r",
+							"    pm.expect(commentsStatus).to.eql(\"disabled\");\r",
+							"})\r",
+							"\r",
+							"//Assertion nested object with unnumerable properties of an object\r",
+							"let boardStatus;\r",
+							"\r",
+							"for(let key in jsonData.limits){\r",
+							"    console.log(key, jsonData.limits[key])\r",
+							"    if(jsonData.limits[key].hasOwnProperty('boards')) {\r",
+							"            boardStatus = jsonData.limits[key].boards.totalPerMember.status\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"console.log(boardStatus);\r",
+							"\r",
+							"pm.test(\"board status should be ok\", function () {\r",
+							"    pm.expect(boardStatus).to.eql(\"ok\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://www.mocky.io/v2/5ab34d8c2f00006600ca3652",
+					"protocol": "http",
+					"host": [
+						"www",
+						"mocky",
+						"io"
+					],
+					"path": [
+						"v2",
+						"5ab34d8c2f00006600ca3652"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Assertion with arrays",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let jsonData = pm.response.json();\r",
+							"\r",
+							"let manufacturer;\r",
+							"\r",
+							"for(let filter of jsonData.filters) {\r",
+							"        if(filter.name == \"MANUFACTURER\"){\r",
+							"            manufacturer = filter;\r",
+							"        }\r",
+							"}\r",
+							"\r",
+							"console.log(manufacturer);\r",
+							"\r",
+							"pm.test(\"Manufacturer should not be allowed\", function(){\r",
+							"    pm.expect(manufacturer.name).to.eql(\"MANUFACTURER\");\r",
+							"    pm.expect(manufacturer.isAllowed).to.eql(false);\r",
+							"\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://www.mocky.io/v2/5ab350d62f00005a00ca3663",
+					"protocol": "http",
+					"host": [
+						"www",
+						"mocky",
+						"io"
+					],
+					"path": [
+						"v2",
+						"5ab350d62f00005a00ca3663"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
